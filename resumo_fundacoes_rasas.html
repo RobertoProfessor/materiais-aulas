@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo Técnico: Tipos e Dimensionamento - Fundações 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .section-card { background: white; border-radius: 12px; padding: 2.5rem; border: 1px solid #e2e8f0; margin-bottom: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .formula-box { background: #f8fafc; border-left: 4px solid #0369a1; padding: 1.5rem; font-family: 'Courier New', Courier, monospace; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .step-number { background: #0369a1; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; items-center; justify-content: center; font-size: 0.875rem; margin-right: 0.75rem; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 pb-20">
+
+    <nav class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-blue-900 font-bold tracking-tighter text-lg underline decoration-blue-500 underline-offset-4">Engenharia Civil</span>
+            </div>
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-all">
+                <span>🏠</span> Portal Principal
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        
+        <header class="mb-16 text-center">
+            <span class="text-blue-600 font-bold uppercase tracking-widest text-sm">Teoria e Prática</span>
+            <h1 class="text-5xl font-black text-slate-900 mt-2 mb-6">Fundações Rasas</h1>
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                Um guia completo sobre tipologias e o roteiro matemático para o dimensionamento geométrico conforme a NBR 6122.
+            </p>
+        </header>
+
+        <!-- Seção 1: Tipos de Fundações -->
+        <section class="section-card">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center">
+                <span class="mr-3">📂</span> Tipologias de Fundações Rasas
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="border border-slate-100 p-5 rounded-xl hover:bg-blue-50 transition-colors">
+                    <h3 class="text-lg font-bold text-blue-800 mb-2">Sapata Isolada</h3>
+                    <p class="text-sm leading-relaxed">Transmitir a carga de um único pilar. Pode ser centrada ou excêntrica, de formato quadrado, retangular ou circular.</p>
+                </div>
+                <div class="border border-slate-100 p-5 rounded-xl hover:bg-blue-50 transition-colors">
+                    <h3 class="text-lg font-bold text-blue-800 mb-2">Sapata Associada</h3>
+                    <p class="text-sm leading-relaxed">Comum a mais de um pilar. Utilizada quando a proximidade entre pilares inviabiliza sapatas isoladas ou para corrigir excentricidade em divisas.</p>
+                </div>
+                <div class="border border-slate-100 p-5 rounded-xl hover:bg-blue-50 transition-colors">
+                    <h3 class="text-lg font-bold text-blue-800 mb-2">Viga de Fundação (Viga Alavanca)</h3>
+                    <p class="text-sm leading-relaxed">Utilizada em pilares de divisa para equilibrar o momento gerado pela excentricidade, transmitindo a carga para um pilar interno.</p>
+                </div>
+                <div class="border border-slate-100 p-5 rounded-xl hover:bg-blue-50 transition-colors">
+                    <h3 class="text-lg font-bold text-blue-800 mb-2">Radier</h3>
+                    <p class="text-sm leading-relaxed">Elemento único que recebe todos os pilares da estrutura. Funciona como uma grande laje que distribui a carga por toda a área da projeção da edificação.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: Diagrama de Tensões -->
+        <section class="section-card">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center">
+                <span class="mr-3">📊</span> O Mecanismo de Carga
+            </h2>
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <p class="mb-4">Diferente das fundações profundas, aqui a resistência provém quase exclusivamente da base.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 font-bold">✓</span>
+                            <span><strong>Tensões Médias:</strong> Devem ser menores que a tensão admissível do solo ($\sigma_{adm}$).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 font-bold">✓</span>
+                            <span><strong>Bulbo de Pressões:</strong> Atinge profundidades entre 1.5 a 2.0 vezes a largura da fundação.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex justify-center bg-white p-4 rounded-lg">
+                    <canvas id="soilCanvas" width="300" height="250" class="max-w-full"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 3: Roteiro de Dimensionamento -->
+        <section class="section-card bg-slate-900 text-white">
+            <h2 class="text-3xl font-bold mb-8 flex items-center text-blue-400">
+                <span class="mr-3">📏</span> Dimensionamento Geométrico
+            </h2>
+            
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="step-number">1</span> Área da Base (Planta)
+                    </h3>
+                    <p class="text-slate-400 mb-2 italic">Calculada para não ultrapassar a resistência do solo.</p>
+                    <div class="formula-box bg-slate-800 border-blue-400 text-blue-100">
+                        Área (A) ≥ Carga do Pilar (P) / Tensão Admissível (σ_adm)
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="step-number">2</span> Dimensões Lados (Critério de Abas Iguais)
+                    </h3>
+                    <p class="text-slate-400 mb-2 italic">Para otimizar o momento fletor e o consumo de materiais.</p>
+                    <div class="formula-box bg-slate-800 border-blue-400 text-blue-100">
+                        (A - B) = (a0 - b0) <br>
+                        Onde: A, B = Lados da Sapata; a0, b0 = Lados do Pilar
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="step-number">3</span> Altura da Sapata (Rigidez)
+                    </h3>
+                    <p class="text-slate-400 mb-2 italic">Garantindo que a sapata se comporte como um elemento rígido.</p>
+                    <div class="formula-box bg-slate-800 border-blue-400 text-blue-100">
+                        h ≥ (A - a0) / 3
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 4: Vídeo de Apoio -->
+        <section class="section-card">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center">
+                <span class="mr-3">🎬</span> Aula em Vídeo
+            </h2>
+            <div class="video-container">
+                <!-- Professor: Substitua o ID final pelo ID do seu vídeo -->
+                <iframe 
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                    title="Vídeo Aula Engenharia" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-12 px-6">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="font-bold text-slate-900">Prof. Roberto Monteiro</p>
+                <p class="text-slate-500 text-sm">Fundações 1 - Engenharia Civil</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="index.html" class="bg-blue-900 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-800 transition-all shadow-lg">Praticar Exercícios</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function drawSoil() {
+            const c = document.getElementById('soilCanvas');
+            const ctx = c.getContext('2d');
+            
+            // Sapata
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(100, 50, 100, 20); // Base
+            ctx.fillRect(140, 10, 20, 40);  // Pilar
+            
+            // Solo
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 70);
+            ctx.lineTo(300, 70);
+            ctx.stroke();
+
+            // Bulbo
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = '#3b82f6';
+            
+            // Camadas do bulbo
+            for(let i=1; i<=3; i++) {
+                ctx.beginPath();
+                ctx.ellipse(150, 70, 40*i, 60*i, 0, 0, Math.PI);
+                ctx.stroke();
+            }
+            
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText("Solo de Fundação", 100, 240);
+        }
+
+        window.onload = drawSoil;
+    </script>
+</body>
+</html>
