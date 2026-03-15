@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Exercícios Interativa - Fundações 1</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tailwind Config for Custom Colors/Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Embedded CSS strictly for Chart Containers and Print Media -->
+    <style>
+        /* CSS resets and base styles */
+        body { -webkit-font-smoothing: antialiased; }
+        
+        /* Mandatory Chart Container Constraints */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 60vh;
+            max-height: 450px;
+            min-height: 300px;
+        }
+
+        /* Interactive Element Transitions */
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        /* Print Styles to fulfill the "Generate PDF" requirement conceptually */
+        @media print {
+            body { background-color: white; }
+            .no-print { display: none !important; }
+            .print-break { page-break-before: always; }
+            .shadow-lg, .shadow-md { box-shadow: none !important; border: 1px solid #e5e7eb; }
+            .container { max-width: 100% !important; padding: 0 !important; }
+        }
+
+        /* Hide elements by default */
+        .hidden-answer { display: none; }
+    </style>
+
+    <!-- Chosen Palette: Slate (Neutrals) and Sky Blue (Brand/Accent) to convey a professional, academic engineering tone. -->
+    
+    <!-- Application Structure Plan: 
+         1. Header: Contextualizes the tool (Course, Prof, Print actions).
+         2. Interactive Dashboard (Concept Visualizer): A Chart.js graph showing the core mathematical relationship of the topic (Area vs. Load vs. Soil Capacity) to build intuition before exercises.
+         3. Section - Teoria (5 Questions): Multiple choice clicking. Allows self-assessment.
+         4. Section - Prática (5 Questions): Geometric design calculation scenarios.
+         5. Floating/Sticky Action Bar: A toggle to "Modo Gabarito" (Answer Key Mode), which reveals step-by-step calculations and highlights correct answers. This interactive approach replaces the requested static "two PDFs", providing a superior web-based study experience while allowing printing to PDF in either state.
+    -->
+
+    <!-- Visualization & Content Choices: 
+         - Goal: Inform/Teach -> Viz: Line Chart (Chart.js) -> Interaction: Hover tooltips, dataset toggling. Justification: Visually demonstrates how poor soil requires exponentially larger footings, a core concept in Fundações 1. Library: Chart.js Canvas. NO SVG/Mermaid.
+         - Goal: Assess Theory -> Viz: Interactive List/Buttons -> Interaction: Click to select, Toggle Answer Key to validate. Justification: Active recall is better than passive reading. 
+         - Goal: Assess Calculations -> Viz: Structured Text & Hidden Math Blocks -> Interaction: Reveal logic via Global Toggle. Justification: Forces the student to attempt the math before seeing the step-by-step geometry sizing logic. 
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800 pb-20">
+
+    <!-- Header Navigation -->
+    <header class="bg-brand-900 text-white sticky top-0 z-50 shadow-md print:static print:shadow-none print:text-black print:bg-white print:border-b-2 print:border-black">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">Fundações 1</h1>
+                <p class="text-brand-100 print:text-gray-600 text-sm">Prof. Roberto Monteiro | Curso de Engenharia Civil</p>
+            </div>
+            <div class="flex gap-3 no-print">
+                <button onclick="window.print()" class="bg-brand-700 hover:bg-brand-500 px-4 py-2 rounded text-sm font-semibold transition-colors flex items-center gap-2">
+                    <span>🖨️</span> Imprimir / Salvar PDF
+                </button>
+                <button id="toggleAnswersBtn" onclick="toggleCorrectionMode()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-sm font-semibold transition-colors flex items-center gap-2 border border-green-400">
+                    <span>👁️</span> Mostrar Gabarito e Cálculos
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- Introduction & Context -->
+        <section class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
+            <h2 class="text-xl font-bold text-slate-800 mb-3 border-b pb-2">Sobre esta Lista Interativa</h2>
+            <p class="text-slate-600 leading-relaxed">
+                Esta plataforma interativa foi desenvolvida para consolidar os conceitos de <strong>Dimensionamento Geométrico de Fundações Rasas</strong> (Blocos, Sapatas Isoladas e Sapatas Associadas). O foco exclusivo desta lista é a determinação da geometria (largura, comprimento e altura) baseada nas cargas admissíveis do solo e critérios de rigidez, sem adentrar no dimensionamento das armaduras (concreto armado).
+                <br><br>
+                <strong>Instruções:</strong> Tente resolver as questões clicando nas alternativas. Quando finalizar, utilize o botão <em>"Mostrar Gabarito e Cálculos"</em> no topo da página para validar suas respostas e visualizar o memorial de cálculo passo a passo. Você pode imprimir a página antes ou depois de revelar o gabarito para gerar as versões em PDF solicitadas.
+            </p>
+        </section>
+
+        <!-- Interactive Visualization Section -->
+        <section class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
+            <h2 class="text-xl font-bold text-slate-800 mb-2">Simulador: Relação Carga vs. Área Necessária</h2>
+            <p class="text-slate-600 mb-6 text-sm">
+                Antes de iniciar os cálculos, interaja com o gráfico abaixo. Ele ilustra o princípio fundamental do dimensionamento geométrico: a área da base da sapata ($A$) é diretamente proporcional à carga do pilar ($P$) e inversamente proporcional à tensão admissível do solo ($\sigma_{adm}$). Observe como solos mais fracos exigem um crescimento acelerado da área da fundação.
+            </p>
+            
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                <div class="chart-container">
+                    <canvas id="foundationChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Parte 1: Questões Teóricas -->
+        <section>
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-brand-900 flex items-center gap-2">
+                    <span class="bg-brand-100 text-brand-700 px-3 py-1 rounded-md text-sm">Parte 1</span> 
+                    Conceitos e Definições (Teoria)
+                </h2>
+                <p class="text-slate-600 mt-2 text-sm">Avaliação dos conceitos básicos sobre os tipos de fundações rasas e seus critérios de utilização conforme a NBR 6122.</p>
+            </div>
+
+            <div class="space-y-6" id="teoria-container">
+                <!-- Question 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">1. Segundo a NBR 6122, como é definida classicamente uma fundação rasa (ou direta)?</h3>
+                    <div class="space-y-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            A) Elemento de fundação que transmite a carga ao terreno predominantemente por atrito lateral, independentemente da profundidade.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">
+                            B) Elemento de fundação em que a carga é transmitida ao terreno pelas tensões distribuídas sob sua base, e a profundidade de assentamento é inferior a duas vezes a menor dimensão em planta.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            C) Qualquer fundação executada com escavação manual com profundidade superior a 3 metros.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            D) Elemento de fundação cilíndrico, moldado in loco, que sempre atinge o impenetrável à percussão.
+                        </button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-900 text-sm">
+                        <strong>Comentário:</strong> Correto. A NBR 6122 define fundação rasa (direta ou superficial) aquela em que a carga é transmitida ao terreno, predominantemente pelas pressões sob a base, e em que a profundidade de assentamento em relação ao terreno adjacente é inferior a duas vezes a menor dimensão da fundação.
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">2. Qual a principal diferença conceitual e estrutural entre um "Bloco de Fundação" e uma "Sapata"?</h3>
+                    <div class="space-y-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            A) Blocos suportam apenas cargas horizontais, enquanto sapatas suportam apenas cargas verticais.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            B) As sapatas são executadas em concreto simples, enquanto os blocos exigem armadura de flexão.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">
+                            C) O bloco atua essencialmente à compressão (concreto simples, sem necessidade de armadura para tração), enquanto a sapata não é maciça o suficiente e exige armadura para resistir aos esforços de tração na base.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            D) Blocos são considerados fundações profundas e sapatas são fundações rasas.
+                        </button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-900 text-sm">
+                        <strong>Comentário:</strong> Correto. Blocos são dimensionados com uma altura elevada, garantindo rigidez suficiente para que as tensões de tração sejam absorvidas pelo próprio concreto (concreto simples). Sapatas possuem altura menor, gerando flexão que exige armadura de aço na face inferior.
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">3. Em qual das situações abaixo o uso de uma "Sapata Associada" é tecnicamente a solução geométrica mais indicada?</h3>
+                    <div class="space-y-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">
+                            A) Quando a proximidade entre dois ou mais pilares faz com que suas sapatas isoladas individuais se sobreponham em planta.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            B) Quando o pilar de borda está encostado na divisa e há espaço livre ilimitado para o outro lado.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            C) Quando a carga do pilar é muito pequena e o solo possui altíssima resistência.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            D) Exclusivamente para suportar pilares circulares em obras de pontes.
+                        </button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-900 text-sm">
+                        <strong>Comentário:</strong> Correto. A sapata associada (ou sapata conjunta) une dois ou mais pilares em um único elemento de fundação. A principal motivação geométrica é a superposição das áreas necessárias caso fossem projetadas sapatas isoladas.
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">4. Na determinação da geometria em planta (lados A e B) de uma sapata isolada retangular para um pilar retangular (lados a0 e b0), qual regra prática é amplamente adotada visando a economia do projeto?</h3>
+                    <div class="space-y-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            A) A largura da sapata deve ser sempre o triplo da largura do pilar.
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            B) A relação A/B da sapata deve ser igual à proporção áurea (1,618).
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">
+                            C) Manter os balanços (abas) iguais em ambas as direções, ou seja, a diferença entre os lados da sapata deve ser igual à diferença entre os lados do pilar (A - B = a0 - b0).
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            D) Adotar sempre formato estritamente quadrado, independentemente da forma do pilar.
+                        </button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-900 text-sm">
+                        <strong>Comentário:</strong> Correto. Igualar as abas da sapata (balanços) nas duas direções faz com que os momentos fletores máximos na base do pilar sejam próximos, otimizando o consumo de aço e concreto (condição econômica ideal).
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">5. Para que uma sapata seja considerada "Rígida" (distribuição linear das tensões no solo), sua altura (h) deve satisfazer a uma condição geométrica baseada na dimensão da sapata (A) e do pilar (a0). Qual é essa condição geral?</h3>
+                    <div class="space-y-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            A) h &ge; (A + a0) / 2
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">
+                            B) h &ge; (A - a0) / 3
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            C) h &le; A / 4
+                        </button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">
+                            D) h = (A * a0) / 10
+                        </button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-900 text-sm">
+                        <strong>Comentário:</strong> Correto. A condição de rigidez clássica para sapatas estabelece que a altura total 'h' deve ser maior ou igual a um terço do balanço, ou seja, $h \ge \frac{A - a_0}{3}$. Isso garante que a sapata não sofra deformações excessivas que alterem a distribuição uniforme (ou linear) das tensões no solo.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Parte 2: Questões Práticas (Cálculo) -->
+        <section class="print-break">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-brand-900 flex items-center gap-2">
+                    <span class="bg-brand-100 text-brand-700 px-3 py-1 rounded-md text-sm">Parte 2</span> 
+                    Dimensionamento Geométrico (Prática)
+                </h2>
+                <p class="text-slate-600 mt-2 text-sm">Resolução de problemas de geometria em planta e elevação baseados nas cargas de serviço e características do solo. Utilize os arredondamentos comerciais usuais de 5 em 5 cm quando necessário.</p>
+            </div>
+
+            <div class="space-y-6" id="pratica-container">
+                <!-- Calc 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">6. Dimensione em planta (lados A e B) uma sapata isolada quadrada. O pilar central também é quadrado com dimensões 30 x 30 cm. A carga total de serviço do pilar é P = 1.200 kN e a tensão admissível do solo é &sigma;<sub>adm</sub> = 300 kPa.</h3>
+                    <div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none mt-2" data-correct="false" onclick="selectOption(this)">A) 1,50 m x 1,50 m</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">B) 2,00 m x 2,00 m</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">C) 2,25 m x 2,25 m</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">D) 4,00 m x 4,00 m</button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono text-sm leading-relaxed">
+                        <h4 class="font-bold mb-2 uppercase text-xs text-slate-500 tracking-wider">Memória de Cálculo</h4>
+                        1. Área necessária: Área = Carga / Tensão Admissível<br>
+                        Área = 1.200 kN / 300 kPa = 4,0 m²<br><br>
+                        2. Como a sapata é quadrada, Lado A = Lado B = &radic;Área<br>
+                        Lado = &radic;4,0 = 2,0 m<br><br>
+                        <strong>Resposta:</strong> Sapata com dimensões em planta de 2,00 m x 2,00 m.
+                    </div>
+                </div>
+
+                <!-- Calc 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">7. Um pilar retangular de dimensões a<sub>0</sub> = 60 cm e b<sub>0</sub> = 20 cm atua com uma carga P = 1.400 kN. A tensão admissível do solo é 200 kPa. Qual deve ser a dimensão final em planta da sapata retangular, adotando o critério de abas iguais?</h3>
+                    <div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none mt-2" data-correct="false" onclick="selectOption(this)">A) 2,00 m x 3,50 m</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">B) 2,50 m x 2,80 m</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">C) 3,00 m x 2,33 m</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">D) 2,85 m x 2,45 m</button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono text-sm leading-relaxed overflow-x-auto">
+                        <h4 class="font-bold mb-2 uppercase text-xs text-slate-500 tracking-wider">Memória de Cálculo</h4>
+                        1. Área = P / &sigma;<sub>adm</sub> = 1400 / 200 = 7,0 m²<br><br>
+                        2. Critério de abas iguais: A - B = a<sub>0</sub> - b<sub>0</sub><br>
+                        A - B = 0,60 - 0,20 = 0,40 m  &rarr;  A = B + 0,40<br><br>
+                        3. Equação da área: A * B = 7,0<br>
+                        (B + 0,40) * B = 7,0 &rarr; B² + 0,40B - 7,0 = 0<br><br>
+                        4. Resolvendo Bhaskara:<br>
+                        &Delta; = (0,40)² - 4*(1)*(-7,0) = 0,16 + 28 = 28,16<br>
+                        B = (-0,40 + &radic;28,16) / 2 = (-0,40 + 5,306) / 2 = 2,453 m<br>
+                        Arredondando para múltiplo de 5cm: <strong>B = 2,45 m</strong><br><br>
+                        5. Encontrando A:<br>
+                        A = 2,45 + 0,40 = <strong>2,85 m</strong><br>
+                        Verificação: 2,45 * 2,85 = 6,98 m² (&asymp; 7,0 m². OK).
+                    </div>
+                </div>
+
+                <!-- Calc 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">8. Uma sapata isolada foi projetada com base quadrada de 2,40 m x 2,40 m para suportar um pilar de 40 cm x 40 cm. Para garantir o comportamento de "sapata rígida", qual deve ser a altura total mínima (h) dessa sapata?</h3>
+                    <div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none mt-2" data-correct="false" onclick="selectOption(this)">A) 50 cm</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">B) 60 cm</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">C) 70 cm</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">D) 80 cm</button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono text-sm leading-relaxed">
+                        <h4 class="font-bold mb-2 uppercase text-xs text-slate-500 tracking-wider">Memória de Cálculo</h4>
+                        1. Dados: A = 240 cm ; a<sub>0</sub> = 40 cm<br><br>
+                        2. Condição de Rigidez: h &ge; (A - a<sub>0</sub>) / 3<br>
+                        h &ge; (240 - 40) / 3<br>
+                        h &ge; 200 / 3<br>
+                        h &ge; 66,67 cm<br><br>
+                        3. Arredondamento estrutural a favor da segurança (múltiplo de 5cm):<br>
+                        Adota-se <strong>h = 70 cm</strong>.
+                    </div>
+                </div>
+
+                <!-- Calc 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">9. Para o dimensionamento de um "Bloco de Fundação" de concreto simples (quadrado), a altura deve ser suficiente para que as tensões de tração sejam combatidas sem armadura. Sendo o pilar 20x20 cm e o bloco projetado com lado A = 1,20 m, qual a altura mínima (h) do bloco adotando o ângulo do cone de compressão de 60º? <br><span class="text-sm font-normal text-slate-500">(Dica: tg 60º &asymp; 1,73)</span></h3>
+                    <div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none mt-2" data-correct="false" onclick="selectOption(this)">A) 60 cm</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">B) 75 cm</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="true" onclick="selectOption(this)">C) 90 cm</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">D) 105 cm</button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono text-sm leading-relaxed">
+                        <h4 class="font-bold mb-2 uppercase text-xs text-slate-500 tracking-wider">Memória de Cálculo</h4>
+                        1. Para blocos rígidos de concreto não armado, a inclinação da biela de compressão deve respeitar um ângulo &alpha; em relação à horizontal (usualmente &ge; 60º).<br><br>
+                        2. A fórmula geométrica da altura baseada no balanço c = (A - a<sub>0</sub>)/2 é:<br>
+                        h &ge; c * tg(60º)<br>
+                        h &ge; [(A - a<sub>0</sub>) / 2] * 1,73<br><br>
+                        3. Substituindo os valores em cm:<br>
+                        h &ge; [(120 - 20) / 2] * 1,73<br>
+                        h &ge; [100 / 2] * 1,73<br>
+                        h &ge; 50 * 1,73 = 86,5 cm<br><br>
+                        4. Adotando valor comercial redondo e seguro: <strong>h = 90 cm</strong>.
+                    </div>
+                </div>
+
+                <!-- Calc 5 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 question-block">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-4">10. Dois pilares, P1 (600 kN) e P2 (900 kN), estão muito próximos e será necessária uma Sapata Associada. A distância entre os centros de gravidade dos pilares é de 2,0 m. A tensão admissível do solo é de 150 kPa. Qual será a área em planta total exigida para esta sapata associada, ignorando o peso próprio da sapata numa primeira estimativa?</h3>
+                    <div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none mt-2" data-correct="true" onclick="selectOption(this)">A) 10,0 m²</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">B) 6,0 m²</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">C) 15,0 m²</button>
+                        <button class="option-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 focus:outline-none" data-correct="false" onclick="selectOption(this)">D) 12,5 m²</button>
+                    </div>
+                    <div class="hidden-answer mt-4 p-5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono text-sm leading-relaxed">
+                        <h4 class="font-bold mb-2 uppercase text-xs text-slate-500 tracking-wider">Memória de Cálculo</h4>
+                        1. A carga total atuante na fundação é a soma das cargas dos pilares associados.<br>
+                        P<sub>total</sub> = P1 + P2 = 600 kN + 900 kN = 1.500 kN.<br><br>
+                        2. A área em planta deve ser suficiente para dissipar toda a carga baseada na capacidade do solo.<br>
+                        Área = P<sub>total</sub> / &sigma;<sub>adm</sub><br>
+                        Área = 1.500 kN / 150 kPa = 10,0 m².<br><br>
+                        <em>Nota:</em> O passo seguinte seria posicionar o centro de gravidade da sapata coincidente com o centro de carga (resultante) dos pilares para evitar excentricidades, mas a área total já está definida pela estática básica.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 py-6 mt-12 text-center text-sm no-print">
+        <p>Desenvolvido para fins didáticos. Disciplina Fundações 1 - Engenharia Civil.</p>
+    </footer>
+
+    <!-- Interactive Logic -->
+    <script>
+        // 1. Chart.js Visualization Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('foundationChart').getContext('2d');
+            
+            // Generate data points: Área = Carga / Tensão
+            // Let's plot Load from 100 to 2000 kN
+            const loads = [];
+            for(let i=100; i<=2000; i+=100) loads.push(i);
+
+            // Three soil scenarios
+            const soilWeak = 150; // kPa
+            const soilMedium = 300; // kPa
+            const soilStrong = 450; // kPa
+
+            const areaWeak = loads.map(load => load / soilWeak);
+            const areaMedium = loads.map(load => load / soilMedium);
+            const areaStrong = loads.map(load => load / soilStrong);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: loads,
+                    datasets: [
+                        {
+                            label: 'Solo Fraco (σ = 150 kPa)',
+                            data: areaWeak,
+                            borderColor: '#ef4444', // Red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Solo Médio (σ = 300 kPa)',
+                            data: areaMedium,
+                            borderColor: '#eab308', // Yellow
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Solo Forte (σ = 450 kPa)',
+                            data: areaStrong,
+                            borderColor: '#22c55e', // Green
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(2)} m² de base`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Carga do Pilar P (kN)' },
+                            grid: { color: '#e5e7eb' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Área da Sapata (m²)' },
+                            grid: { color: '#e5e7eb' }
+                        }
+                    }
+                }
+            });
+        });
+
+        // 2. Interactive Exercises Logic
+        let correctionMode = false;
+
+        function selectOption(btn) {
+            // Prevent changing selection if correction mode is active
+            if (correctionMode) return;
+
+            // Find parent block
+            const block = btn.closest('.question-block');
+            
+            // Remove 'selected' styling from all buttons in this block
+            const buttons = block.querySelectorAll('.option-btn');
+            buttons.forEach(b => {
+                b.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50', 'border-brand-500');
+                b.dataset.selected = "false";
+            });
+
+            // Add 'selected' styling to clicked button
+            btn.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50', 'border-brand-500');
+            btn.dataset.selected = "true";
+        }
+
+        function toggleCorrectionMode() {
+            correctionMode = !correctionMode;
+            const toggleBtn = document.getElementById('toggleAnswersBtn');
+            
+            if (correctionMode) {
+                toggleBtn.innerHTML = '<span>🔙</span> Ocultar Gabarito';
+                toggleBtn.classList.replace('bg-green-600', 'bg-slate-600');
+                toggleBtn.classList.replace('hover:bg-green-500', 'hover:bg-slate-500');
+                toggleBtn.classList.replace('border-green-400', 'border-slate-400');
+            } else {
+                toggleBtn.innerHTML = '<span>👁️</span> Mostrar Gabarito e Cálculos';
+                toggleBtn.classList.replace('bg-slate-600', 'bg-green-600');
+                toggleBtn.classList.replace('hover:bg-slate-500', 'hover:bg-green-500');
+                toggleBtn.classList.replace('border-slate-400', 'border-green-400');
+            }
+
+            // Process all question blocks
+            const blocks = document.querySelectorAll('.question-block');
+            blocks.forEach(block => {
+                const buttons = block.querySelectorAll('.option-btn');
+                const answerDiv = block.querySelector('.hidden-answer');
+
+                if (correctionMode) {
+                    // Show explanation
+                    answerDiv.style.display = 'block';
+                    
+                    // Style buttons based on correct/incorrect
+                    buttons.forEach(btn => {
+                        // Reset neutral selections
+                        btn.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50', 'border-brand-500');
+                        btn.disabled = true; // disable clicks
+                        btn.classList.add('cursor-not-allowed', 'opacity-90');
+
+                        const isCorrect = btn.dataset.correct === "true";
+                        const isSelected = btn.dataset.selected === "true";
+
+                        if (isCorrect) {
+                            // Highlight correct answer in green
+                            btn.classList.add('bg-green-100', 'border-green-500', 'text-green-900', 'font-bold', 'ring-2', 'ring-green-500');
+                        } else if (isSelected && !isCorrect) {
+                            // Highlight wrong selected answer in red
+                            btn.classList.add('bg-red-100', 'border-red-500', 'text-red-900', 'line-through');
+                        }
+                    });
+                } else {
+                    // Hide explanation
+                    answerDiv.style.display = 'none';
+                    
+                    // Reset buttons
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.classList.remove('cursor-not-allowed', 'opacity-90', 'bg-green-100', 'border-green-500', 'text-green-900', 'font-bold', 'ring-2', 'ring-green-500', 'bg-red-100', 'border-red-500', 'text-red-900', 'line-through');
+                        
+                        // Restore previous selection visually
+                        if (btn.dataset.selected === "true") {
+                            btn.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50', 'border-brand-500');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
