@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resumo Técnico: Tipos e Dimensionamento - Fundações 1</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+Isso deixará o material com o rigor matemático exato que o senhor solicitou! Posso ajudar com mais algum detalhe do roteiro de cálculo?
     <style>
         .section-card { background: white; border-radius: 12px; padding: 2.5rem; border: 1px solid #e2e8f0; margin-bottom: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
         .formula-box { background: #f8fafc; border-left: 4px solid #0369a1; padding: 1.5rem; font-family: 'Courier New', Courier, monospace; margin: 1rem 0; border-radius: 0 8px 8px 0; }
@@ -96,24 +100,40 @@
             <div class="space-y-8">
                 <div>
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
-                        <span class="step-number">1</span> Área da Base (Planta)
+                        <span class="step-number">2</span> Dimensões dos Lados (Abas Iguais)
                     </h3>
-                    <p class="text-slate-400 mb-2 italic">Calculada para não ultrapassar a resistência do solo.</p>
-                    <div class="formula-box bg-slate-800 border-blue-400 text-blue-100">
-                        Área (A) ≥ Carga do Pilar (P) / Tensão Admissível (σ_adm)
+                    <p class="text-slate-400 mb-2 italic text-sm">
+                        Para que os momentos fletores sejam equilibrados, as abas (balanços) devem ser iguais: $(A - a_0) = (B - b_0)$.
+                    </p>
+                    
+                <div class="formula-box bg-slate-800 border-blue-400 text-blue-100 overflow-x-auto">
+                    <p class="mb-4"><strong>1º Cálculo da Área Necessária ($S$):</strong></p>
+                    <p class="text-lg text-center mb-6">
+                            $S = \frac{F \cdot K}{\sigma_{adm}}$
+                    </p>
+                    <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider text-center">
+                            (Onde $K=1,1$ para sapatas rígidas)
+                    </p>
+                        
+                    <hr class="border-slate-700 mb-6">
+                        
+                    <p class="mb-4"><strong>2º Cálculo do Menor Lado ($B$):</strong></p>
+                    <p class="text-lg text-center">
+                        $B = \frac{(b_0 - a_0)}{2} + \sqrt{S + \frac{(a_0 - b_0)^2}{4}}$
+                    </p>
+                </div>
+    
+                <div class="mt-4 grid grid-cols-2 gap-4 text-xs text-slate-400">
+                    <div>
+                        <strong>A, B:</strong> Lados da sapata<br>
+                        <strong>a₀, b₀:</strong> Lados do pilar
+                    </div>
+                    <div>
+                        <strong>F:</strong> Carga vertical (kN)<br>
+                        <strong>σ_adm:</strong> Tensão adm. do solo
                     </div>
                 </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 flex items-center">
-                        <span class="step-number">2</span> Dimensões Lados (Critério de Abas Iguais)
-                    </h3>
-                    <p class="text-slate-400 mb-2 italic">Para otimizar o momento fletor e o consumo de materiais.</p>
-                    <div class="formula-box bg-slate-800 border-blue-400 text-blue-100">
-                        (A - B) = (a0 - b0) <br>
-                        Onde: A, B = Lados da Sapata; a0, b0 = Lados do Pilar
-                    </div>
-                </div>
+            </div>
 
                 <div>
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
