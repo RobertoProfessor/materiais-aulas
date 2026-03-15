@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Acadêmico | Prof. Roberto Monteiro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-grad { transition: transform 0.2s; }
+        .card-grad:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-12 px-4 shadow-lg text-center">
+        <h1 class="text-4xl font-bold">Prof. Roberto Monteiro</h1>
+        <p class="text-blue-200 mt-2 text-xl">Engenharia Civil - Fundações e Estruturas</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto py-12 px-4">
+        <h2 class="text-2xl font-semibold mb-8 border-b-2 border-blue-900 pb-2">Materiais e Listas de Exercícios</h2>
+
+        <div class="grid gap-6">
+            <!-- Card de Material 1 -->
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-blue-600 card-grad flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">Lista 01: Fundações Rasas</h3>
+                    <p class="text-slate-600">Dimensionamento geométrico de sapatas e blocos.</p>
+                </div>
+                <a href="lista1.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">Acessar</a>
+            </div>
+
+            <!-- Card de Material 2 (Exemplo de como o senhor adicionará novos) -->
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-slate-300 flex justify-between items-center opacity-75">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-500">Lista 02: Fundações Profundas</h3>
+                    <p class="text-slate-400 italic">Em breve: Estacas e Tubulões.</p>
+                </div>
+                <span class="bg-slate-200 text-slate-500 px-6 py-2 rounded-lg font-medium cursor-not-allowed">Bloqueado</span>
+            </div>
+        </div>
+
+        <!-- Instruções para o Professor -->
+        <div class="mt-16 p-6 bg-amber-50 border border-amber-200 rounded-lg">
+            <h4 class="font-bold text-amber-800">Dica de Organização:</h4>
+            <ul class="list-disc ml-5 mt-2 text-amber-900 space-y-2">
+                <li>Salve este arquivo como <strong>index.html</strong> no seu repositório principal.</li>
+                <li>Renomeie a lista que fizemos antes para <strong>lista1.html</strong>.</li>
+                <li>Sempre que criar uma lista nova, dê um nome como <strong>lista2.html</strong>, <strong>lista3.html</strong> e apenas atualize este arquivo "index" adicionando um novo botão.</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-slate-400 text-sm">
+        &copy; 2024 Portal Acadêmico - Engenharia Civil
+    </footer>
+
+</body>
+</html>
