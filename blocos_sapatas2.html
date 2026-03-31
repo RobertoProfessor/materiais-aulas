@@ -4,28 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Fundações - Monteiro Engenharia</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 700: '#0369a1', 900: '#0c4a6e' }
-                    }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 700: '#0369a1', 900: '#0c4a6e' } }
                 }
             }
         }
     </script>
-
     <style>
         body { -webkit-font-smoothing: antialiased; font-family: 'Inter', sans-serif; }
         .chart-container { position: relative; width: 100%; height: 350px; }
-        .option-btn { transition: all 0.2s ease-in-out; text-align: left; width: 100%; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .option-btn { transition: all 0.2s ease-in-out; text-align: left; width: 100%; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-bottom: 0.5rem; font-size: 0.9rem; }
         .option-btn:hover:not(:disabled) { background-color: #f8fafc; border-color: #cbd5e1; }
-        .hidden-answer { display: none; margin-top: 1rem; padding: 1rem; border-radius: 0.5rem; font-size: 0.875rem; }
+        .hidden-answer { display: none; margin-top: 1rem; padding: 1rem; border-radius: 0.5rem; font-size: 0.875rem; border: 1px solid; }
         @media print { .no-print { display: none !important; } .question-block { break-inside: avoid; border: 1px solid #eee; margin-bottom: 2rem; } }
     </style>
 </head>
@@ -34,8 +29,8 @@
     <header class="bg-brand-900 text-white sticky top-0 z-50 shadow-md no-print">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight text-white">Fundações 1: Lista Interativa</h1>
-                <p class="text-brand-100 text-sm italic">Monteiro Engenharia | Prof. Monteiro</p>
+                <h1 class="text-2xl font-bold tracking-tight text-white">Fundações 1: Lista Revisão Completa</h1>
+                <p class="text-brand-100 text-sm italic">Monteiro Engenharia | Prof. Roberto Monteiro</p>
             </div>
             <div class="flex gap-3">
                 <button onclick="window.print()" class="bg-brand-700 hover:bg-brand-600 px-4 py-2 rounded text-sm font-semibold transition-all">🖨️ PDF</button>
@@ -47,140 +42,196 @@
     <main class="max-w-4xl mx-auto px-4 py-8 space-y-12">
 
         <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <h2 class="text-lg font-bold text-slate-800 mb-4 uppercase tracking-wider text-sm">Visualizador de Sensibilidade: Carga vs Área</h2>
-            <div class="chart-container">
-                <canvas id="foundationChart"></canvas>
-            </div>
-            <p class="text-xs text-slate-500 mt-4 italic">* Gráfico demonstra como a área da base cresce em solos de baixa capacidade (150kPa) vs alta (450kPa).</p>
+            <h2 class="text-lg font-bold text-slate-800 mb-4 uppercase tracking-wider text-xs">Simulador: Carga vs Área da Base</h2>
+            <div class="chart-container"><canvas id="foundationChart"></canvas></div>
         </section>
 
         <div class="space-y-6">
-            <h2 class="text-2xl font-bold text-brand-900 border-l-4 border-brand-500 pl-4">Parte 1: Teoria e Investigação (SPT)</h2>
+            <h2 class="text-2xl font-bold text-brand-900 border-l-4 border-brand-500 pl-4">Parte 1: Teoria e SPT</h2>
             
             <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
-                <h3 class="font-bold text-lg mb-4">1. No ensaio SPT, o índice NSPT é a soma de quais segmentos?</h3>
+                <h3 class="font-bold mb-4">1. No ensaio SPT, o índice NSPT é a soma de quais segmentos?</h3>
                 <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Dos 45 cm totais de cravação.</button>
-                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Dos 30 cm finais (2º e 3º segmentos de 15cm).</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Dos 30 cm finais (2º e 3º segmentos).</button>
                 <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Apenas do primeiro segmento de 15 cm.</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Da média entre o primeiro e o último metro.</button>
-                <div class="hidden-answer bg-blue-50 text-blue-800 border border-blue-200">
-                    <strong>Gabarito B:</strong> O primeiro segmento é desprezado por ser considerado solo perturbado pela limpeza do furo.
-                </div>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Dos 15 cm iniciais e finais.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: O 1º trecho é desprezado por possível perturbação do solo.</div>
             </div>
 
             <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
-                <h3 class="font-bold text-lg mb-4">2. Qual a definição de fundação rasa segundo a NBR 6122?</h3>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Profundidade maior que 3 metros.</button>
-                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Profundidade de assentamento menor que 2x a menor dimensão da base.</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Qualquer fundação que não utilize aço.</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Fundação que transmite carga apenas por atrito lateral.</button>
-                <div class="hidden-answer bg-blue-50 text-blue-800 border border-blue-200">
-                    <strong>Gabarito B:</strong> Critério normativo baseado na relação profundidade/largura.
-                </div>
+                <h3 class="font-bold mb-4">2. Definição de fundação rasa (NBR 6122):</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Profundidade maior que 3m.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Profundidade menor que 2x a menor dimensão da base.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Fundação que não utiliza concreto.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Assentamento sempre em rocha.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: Critério clássico de profundidade vs largura.</div>
             </div>
-            
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">3. Diferença entre Bloco e Sapata:</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Sapata é redonda, bloco é quadrado.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Bloco não exige armadura de flexão (rígido); sapata exige.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Blocos são apenas para estacas.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Sapatas são apenas para solos arenosos.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: A altura do bloco garante que o concreto suporte a tração.</div>
             </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">4. Qual o peso próprio estimado para o bloco?</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) 2% da carga.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) 10% da carga.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) 50% da carga.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 0%, não se considera.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: Valor prático usual de pré-dimensionamento.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">5. O que indica o "impenetrável" no SPT?</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Solo muito mole.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Rocha ou solo extremamente denso.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Presença de água.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Erro do operador.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: Quando não há avanço significativo após muitos golpes.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">6. Ângulo de dispersão recomendado para blocos:</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) 30 graus.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">B) 45 graus.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">C) 60 graus.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 90 graus.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito C: Garante que a biela de compressão seja dominante.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">7. Função do lastro de concreto magro:</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Aumentar a resistência.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Isolar a fundação do solo e limpeza.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Economizar cimento.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Fixar as armaduras.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: Protege o concreto fresco da perda de água.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">8. Tensão admissível aproximada para NSPT = 10:</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) 0,1 MPa.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) 0,2 MPa.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) 0,5 MPa.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 1,0 MPa.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: Pela regra prática NSPT/50.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">9. Vantagem do concreto ciclópico:</h3>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">A) Economia em grandes volumes.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">B) Maior resistência à tração.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Secagem mais rápida.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Dispensa escavação.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito A: Uso de pedra de mão reduz custo de cimento.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-4">10. Tração em sapatas associadas entre pilares:</h3>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Face inferior.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Face superior.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Não há tração.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Nas laterais.</button>
+                <div class="hidden-answer bg-blue-50 text-blue-800 border-blue-200 italic">Gabarito B: Devido à reação do solo de baixo para cima.</div>
+            </div>
+        </div>
 
         <div class="space-y-6">
-            <h2 class="text-2xl font-bold text-brand-900 border-l-4 border-green-500 pl-4">Parte 2: Cálculos e Geometria</h2>
+            <h2 class="text-2xl font-bold text-brand-900 border-l-4 border-green-500 pl-4">Parte 2: Cálculos de Dimensionamento</h2>
 
             <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
-                <h3 class="font-bold text-lg mb-2">Desafio: Pilar em L</h3>
-                <p class="text-sm text-slate-600 mb-4 italic">Carga Pk=700kN, Solo=0,35MPa. Como posicionar a sapata?</p>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) Alinhada pelo canto externo do L.</button>
-                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) Fazendo o CG da sapata coincidir com o CG da seção em L do pilar.</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) Usando uma sapata circular de 1 metro.</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Ignorando o CG e usando o centro geométrico da fôrma externa.</button>
-                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">
-                    MEMORIAL: <br>
-                    1. Área = (700 * 1.1) / 350 = 2.20 m² <br>
-                    2. Para evitar excentricidade e pressões desiguais, o centro de carga (CG do L) deve estar no centro da sapata.
-                </div>
+                <h3 class="font-bold mb-2">11. Pilar Quadrado (30x30)</h3>
+                <p class="text-sm text-slate-600 mb-4 italic">Pk=600kN, Solo=0,3MPa. Qual o lado L?</p>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) 1,20 m</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) 1,50 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) 2,00 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 1,00 m</button>
+                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">A = (600*1.1)/300 = 2.2m² -> L = √2.2 ≈ 1.48 (Adota 1.50m)</div>
             </div>
 
             <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
-                <h3 class="font-bold text-lg mb-2">Desafio: Pilar Retangular (20x60)</h3>
-                <p class="text-sm text-slate-600 mb-4 italic">Pk=800kN, Solo=0,25MPa. Aplique abas iguais (A-B = a-b).</p>
-                <button class="option-btn" data-correct="true" onclick="selectOption(this)">A) A = 2,10m e B = 1,70m</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">B) A = 1,85m e B = 1,85m</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) A = 2,50m e B = 1,40m</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) A = 2,00m e B = 2,00m</button>
-                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">
-                    MEMORIAL: <br>
-                    1. Área = 3.52m² <br>
-                    2. Diferença (D) = 0.40m <br>
-                    3. L² - 0.4L - 3.52 = 0 -> L = 2.08 (Adota 2.10m) <br>
-                    4. B = 2.10 - 0.40 = 1.70m
-                </div>
+                <h3 class="font-bold mb-2">12. Pilar Retangular (20x60)</h3>
+                <p class="text-sm text-slate-600 mb-4 italic">Pk=800kN, Solo=0,25MPa. Abas iguais (A-B=a-b).</p>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">A) 2,10 x 1,70 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">B) 2,00 x 2,00 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) 2,50 x 1,40 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 1,80 x 2,20 m</button>
+                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">Area=3.52m²; D=0.4m; L²-0.4L-3.52=0 -> L=2.08 (2.10) e B=1.70</div>
             </div>
 
             <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
-                <h3 class="font-bold text-lg mb-2">Desafio: Sapata Associada</h3>
-                <p class="text-sm text-slate-600 mb-4 italic">P1=600kN, P2=900kN. Solo=150kPa. Qual a área total?</p>
-                <button class="option-btn" data-correct="true" onclick="selectOption(this)">A) 10,0 m² (Estimativa básica P/tens)</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">B) 6,0 m²</button>
+                <h3 class="font-bold mb-2">13. Pilar Circular (D=40cm)</h3>
+                <p class="text-sm text-slate-600 mb-4 italic">Pk=450kN, Solo=0,2MPa. Diâmetro da sapata?</p>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) 1,50 m</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) 1,80 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) 2,00 m</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 1,20 m</button>
+                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">Area=2.47m² -> Raio=0.89m -> Diâmetro=1.78 (1.80m)</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-2">14. Pilar em L (CG)</h3>
+                <p class="text-sm text-slate-600 mb-4 italic">Onde posicionar o centro da sapata para pilar em L?</p>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">A) No canto externo.</button>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">B) No CG da seção do pilar.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) No centro da fôrma quadrada.</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) Em qualquer lugar.</button>
+                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">Garante que a carga seja centrada, evitando momentos e pressões desiguais.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-bold mb-2">15. Sapata Associada (Área)</h3>
+                <p class="text-sm text-slate-600 mb-4 italic">P1=600kN, P2=900kN, Solo=150kPa.</p>
+                <button class="option-btn" data-correct="true" onclick="selectOption(this)">A) 10,0 m²</button>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">B) 7,0 m²</button>
                 <button class="option-btn" data-correct="false" onclick="selectOption(this)">C) 15,0 m²</button>
-                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 8,0 m²</button>
-                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">
-                    MEMORIAL: <br>
-                    P_total = 600 + 900 = 1500 kN. <br>
-                    Área = 1500 / 150 = 10 m². <br>
-                    (Para projeto real, adicionar peso próprio e verificar CG).
-                </div>
+                <button class="option-btn" data-correct="false" onclick="selectOption(this)">D) 5,0 m²</button>
+                <div class="hidden-answer bg-slate-900 text-green-400 font-mono text-xs">Area = (600+900)/150 = 10m²</div>
             </div>
-
         </div>
     </main>
 
     <script>
-        // Configuração do Gráfico Chart.js
         window.onload = function() {
             const ctx = document.getElementById('foundationChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [200, 400, 600, 800, 1000, 1200],
+                    labels: [200, 400, 600, 800, 1000],
                     datasets: [
-                        { label: 'Solo Fraco (150kPa)', data: [1.3, 2.6, 4.0, 5.3, 6.6, 8.0], borderColor: '#ef4444', tension: 0.2 },
-                        { label: 'Solo Forte (450kPa)', data: [0.4, 0.8, 1.3, 1.7, 2.2, 2.6], borderColor: '#22c55e', tension: 0.2 }
+                        { label: 'Solo 150kPa', data: [1.3, 2.6, 4.0, 5.3, 6.6], borderColor: '#ef4444' },
+                        { label: 'Solo 300kPa', data: [0.6, 1.3, 2.0, 2.6, 3.3], borderColor: '#22c55e' }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { title: { display: true, text: 'Área da Base (m²)' }}, x: { title: { display: true, text: 'Carga do Pilar (kN)' }}}}
+                options: { responsive: true, maintainAspectRatio: false }
             });
         };
 
-        // Lógica de Interatividade das Questões
         function selectOption(btn) {
             const block = btn.closest('.question-block');
-            block.querySelectorAll('.option-btn').forEach(b => {
-                b.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50', 'border-brand-500');
-                b.dataset.selected = "false";
-            });
-            btn.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50', 'border-brand-500');
+            block.querySelectorAll('.option-btn').forEach(b => b.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50'));
+            btn.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50');
             btn.dataset.selected = "true";
         }
 
-        let isCorrected = false;
+        let corrected = false;
         function toggleCorrectionMode() {
-            isCorrected = !isCorrected;
-            const btnToggle = document.getElementById('toggleAnswersBtn');
-            btnToggle.innerText = isCorrected ? "🔙 Ocultar Gabarito" : "👁️ Ver Gabarito";
-            
+            corrected = !corrected;
+            document.getElementById('toggleAnswersBtn').innerText = corrected ? "🔙 Ocultar Gabarito" : "👁️ Ver Gabarito";
             document.querySelectorAll('.question-block').forEach(block => {
-                const answer = block.querySelector('.hidden-answer');
-                answer.style.display = isCorrected ? 'block' : 'none';
-                
+                block.querySelector('.hidden-answer').style.display = corrected ? 'block' : 'none';
                 block.querySelectorAll('.option-btn').forEach(btn => {
-                    if (isCorrected) {
+                    if (corrected) {
                         btn.disabled = true;
-                        if (btn.dataset.correct === "true") {
-                            btn.classList.add('bg-green-100', 'border-green-600', 'font-bold', 'text-green-900');
-                        } else if (btn.dataset.selected === "true") {
-                            btn.classList.add('bg-red-100', 'border-red-600', 'text-red-900');
-                        }
+                        if (btn.dataset.correct === "true") btn.classList.add('bg-green-100', 'border-green-600', 'text-green-900');
+                        else if (btn.dataset.selected === "true") btn.classList.add('bg-red-100', 'border-red-600', 'text-red-900');
                     } else {
                         btn.disabled = false;
-                        btn.classList.remove('bg-green-100', 'border-green-600', 'font-bold', 'text-green-900', 'bg-red-100', 'border-red-600', 'text-red-900');
+                        btn.classList.remove('bg-green-100', 'border-green-600', 'text-green-900', 'bg-red-100', 'border-red-600', 'text-red-900');
                     }
                 });
             });
