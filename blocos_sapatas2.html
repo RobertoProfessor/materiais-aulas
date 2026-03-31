@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Interativa: Fundações 1 - Monteiro Engenharia</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-font-smoothing: antialiased; font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; width: 100%; height: 400px; }
+        .option-btn { transition: all 0.2s ease-in-out; }
+        .hidden-answer { display: none; }
+        @media print {
+            .no-print { display: none !important; }
+            .shadow-sm { box-shadow: none !important; border: 1px solid #e5e7eb; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 pb-20">
+
+    <header class="bg-brand-900 text-white sticky top-0 z-50 shadow-md no-print">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">Fundações 1: Teoria e Prática</h1>
+                <p class="text-brand-100 text-sm">Monteiro Engenharia | Prof. Monteiro</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="window.print()" class="bg-brand-700 hover:bg-brand-500 px-4 py-2 rounded text-sm font-semibold transition-colors">
+                    🖨️ Gerar PDF
+                </button>
+                <button id="toggleAnswersBtn" onclick="toggleCorrectionMode()" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded text-sm font-semibold transition-colors border border-green-400">
+                    👁️ Mostrar Gabarito e Cálculos
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-800 mb-2 underline decoration-brand-500">Instruções da Aula</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">
+                Esta lista cobre <strong>Investigação de Solo (SPT)</strong> e <strong>Dimensionamento Geométrico de Fundações Rasas</strong>. 
+                Nas questões de cálculo, considere o peso próprio da fundação como 10% da carga do pilar e utilize o critério de rigidez da NBR 6122.
+            </p>
+        </section>
+
+        <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <h2 class="text-lg font-bold mb-4">Visualizador: Área da Sapata vs. Capacidade do Solo</h2>
+            <div class="chart-container">
+                <canvas id="foundationChart"></canvas>
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold text-brand-900 border-l-4 border-brand-500 pl-3">Parte 1: Conceitos e SPT</h2>
+            
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-semibold mb-4">1. No ensaio SPT, como é definido o índice NSPT?</h3>
+                <div class="grid gap-2">
+                    <button class="option-btn text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50" data-correct="false" onclick="selectOption(this)">A) Soma dos golpes dos 45cm de cravação.</button>
+                    <button class="option-btn text-left p-3 rounded-lg border border-slate-200 hover:bg-slate-50" data-correct="true" onclick="selectOption(this)">B) Soma dos golpes dos 30cm finais (2º e 3º segmentos).</button>
+                </div>
+                <div class="hidden-answer mt-3 p-3 bg-blue-50 text-blue-800 text-sm rounded-lg">
+                    <strong>Explicação:</strong> O primeiro segmento de 15cm é desprezado por ser considerado solo perturbado pela limpeza do furo.
+                </div>
+            </div>
+
+            </section>
+
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold text-brand-900 border-l-4 border-green-500 pl-3">Parte 2: Dimensionamento Prático</h2>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-semibold mb-4 text-brand-700">DESAFIO: Pilar Retangular (Abas Iguais)</h3>
+                <p class="text-sm text-slate-600 mb-4">Pilar 20x60cm, Pk = 800kN, Solo = 0,25 MPa. Calcule L e B.</p>
+                <div class="grid md:grid-cols-2 gap-2">
+                    <button class="option-btn text-left p-3 rounded-lg border border-slate-200" data-correct="true" onclick="selectOption(this)">L = 2,10m e B = 1,70m</button>
+                    <button class="option-btn text-left p-3 rounded-lg border border-slate-200" data-correct="false" onclick="selectOption(this)">L = 2,50m e B = 1,40m</button>
+                </div>
+                <div class="hidden-answer mt-3 p-4 bg-slate-900 text-green-400 font-mono text-xs rounded-lg">
+                    1. Area = (800 * 1.1) / 250 = 3.52m² <br>
+                    2. D = 0.60 - 0.20 = 0.40m <br>
+                    3. L² - 0.4L - 3.52 = 0 -> L ≈ 2.08m (Adota 2.10m) <br>
+                    4. B = 2.10 - 0.40 = 1.70m
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 question-block">
+                <h3 class="font-semibold mb-4 text-brand-700">DESAFIO: Sapata Associada</h3>
+                <p class="text-sm text-slate-600 mb-4">P1=600kN, P2=900kN. Distância entre eixos=2,0m. Solo=150kPa. Área total?</p>
+                <div class="grid md:grid-cols-2 gap-2">
+                    <button class="option-btn text-left p-3 rounded-lg border border-slate-200" data-correct="true" onclick="selectOption(this)">10,0 m²</button>
+                    <button class="option-btn text-left p-3 rounded-lg border border-slate-200" data-correct="false" onclick="selectOption(this)">12,5 m²</button>
+                </div>
+                <div class="hidden-answer mt-3 p-4 bg-slate-900 text-green-400 font-mono text-xs rounded-lg">
+                    Area = (600 + 900) / 150 = 10,0 m². <br>
+                    Nota: O CG da sapata deve coincidir com a resultante das cargas.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Gráfico
+        const ctx = document.getElementById('foundationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [500, 1000, 1500, 2000],
+                datasets: [{
+                    label: 'Área Necessária (m²) p/ Solo 200kPa',
+                    data: [2.75, 5.5, 8.25, 11],
+                    borderColor: '#0ea5e9',
+                    tension: 0.1
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Lógica de Seleção
+        function selectOption(btn) {
+            const block = btn.closest('.question-block');
+            block.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50');
+                b.dataset.selected = "false";
+            });
+            btn.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50');
+            btn.dataset.selected = "true";
+        }
+
+        // Modo Gabarito
+        let mode = false;
+        function toggleCorrectionMode() {
+            mode = !mode;
+            document.querySelectorAll('.hidden-answer').forEach(ans => ans.style.display = mode ? 'block' : 'none');
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                if(mode) {
+                    if(btn.dataset.correct === "true") btn.classList.add('bg-green-100', 'border-green-500');
+                    if(btn.dataset.selected === "true" && btn.dataset.correct === "false") btn.classList.add('bg-red-100', 'border-red-500');
+                } else {
+                    btn.classList.remove('bg-green-100', 'border-green-500', 'bg-red-100', 'border-red-500');
+                }
+            });
+            document.getElementById('toggleAnswersBtn').innerText = mode ? "🔙 Ocultar Gabarito" : "👁️ Mostrar Gabarito e Cálculos";
+        }
+    </script>
+</body>
+</html>
