@@ -6,7 +6,7 @@
     <title>Trabalho Prático: Fundações Profundas | Prof. Roberto Monteiro</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
     <!-- Header -->
     <header class="bg-blue-900 text-white py-10 px-4 shadow-lg">
@@ -22,31 +22,57 @@
         </div>
     </header>
 
-    <!-- Área de Entrega -->
-    <section class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
-        <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-900 pb-2 mb-6">📤 Orientações para o Envio do Trabalho</h2>
-        <ol>
-            <li>O trabalho deverá compor a nota da VA1 e poderá ser realizado individual ou em dupla;</li>
-            <li>As versões escritas e apresentações deverão ser enviadas através do e-email: <em>roberto.moteiro@umj.edu.br</em>;</li>
-            <li>Os trabalhos deverão ser entregues até um dia antes do início das apresentações <em>(ou seja até o dia 21/09/2026)</em>;</li>
-            <li>Trabalhos entregues posterior ao prazo acima descrito não contabilizarão para a nota, ou seja, valerá apenas a nota da apresentação.</li>
-        </ol>
-    </section>
-
     <main class="max-w-4xl mx-auto py-10 px-4 space-y-8">
+
+        <!-- Área de Entrega (Reformulada com Design Elegante) -->
+        <section class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-900 pb-2 mb-6 flex items-center gap-2">
+                <span>📤</span> Orientações para o Envio do Trabalho
+            </h2>
+            
+            <div class="space-y-3">
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-50 border border-slate-200">
+                    <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-900 text-white font-bold flex items-center justify-center text-sm">1</span>
+                    <p class="text-slate-700 text-sm leading-relaxed pt-1">
+                        O trabalho deverá compor a nota da <strong>VA1</strong> e poderá ser realizado de forma <strong>individual ou em dupla</strong>.
+                    </p>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-slate-50 border border-slate-200">
+                    <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-900 text-white font-bold flex items-center justify-center text-sm">2</span>
+                    <p class="text-slate-700 text-sm leading-relaxed pt-1">
+                        As versões escritas e apresentações deverão ser enviadas através do e-mail: <a href="mailto:roberto.moteiro@umj.edu.br" class="text-blue-700 font-semibold hover:underline">roberto.moteiro@umj.edu.br</a>.
+                    </p>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-amber-50/60 border border-amber-200/80">
+                    <span class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm">3</span>
+                    <p class="text-amber-950 text-sm leading-relaxed pt-1">
+                        Os trabalhos deverão ser entregues até um dia antes do início das apresentações: <strong class="text-amber-900">até 21/09/2026</strong>.
+                    </p>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-red-50/60 border border-red-200/80">
+                    <span class="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 text-white font-bold flex items-center justify-center text-sm">4</span>
+                    <p class="text-red-950 text-sm leading-relaxed pt-1">
+                        Trabalhos entregues após o prazo informado <strong>não pontuarão no relatório escrito</strong> (será contabilizada apenas a nota da apresentação oral).
+                    </p>
+                </div>
+            </div>
+        </section>
 
         <!-- Banner Informativo -->
         <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-xl shadow-sm">
             <h2 class="text-xl font-bold text-blue-950 mb-2">🎯 Objetivo do Trabalho</h2>
             <p class="text-slate-700 leading-relaxed">
-                Este trabalho busca desenvolver o domínio técnico dos alunos sobre a **metodologia executiva, controle de qualidade (NBR 6122 / ABEF), vantagens, limitações e restrições operacionais** das estacas. 
+                Este trabalho busca desenvolver o domínio técnico dos alunos sobre a <strong>metodologia executiva, controle de qualidade (NBR 6122 / ABEF), vantagens, limitações e restrições operacionais</strong> das estacas. 
                 <strong class="text-blue-900">Não haverá dimensionamento nem cálculo de recalques nesta etapa.</strong>
             </p>
         </div>
 
         <!-- Requisitos de Entrega -->
         <section class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
-            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-900 pb-2 mb-6">📦 Modalidades de Entrega (Obrigatória Dupla)</h2>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-900 pb-2 mb-6">📦 Modalidades de Entrega</h2>
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- Entregável 1 -->
                 <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
@@ -179,7 +205,7 @@
     </main>
 
     <footer class="text-center py-8 text-slate-400 text-sm">
-        &copy; 2024 Portal Acadêmico - Prof. Roberto Monteiro • UMJ
+        &copy; 2026 Portal Acadêmico - Prof. Roberto Monteiro • UMJ
     </footer>
 
 </body>
