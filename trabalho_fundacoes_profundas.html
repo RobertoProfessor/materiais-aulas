@@ -22,6 +22,58 @@
         </div>
     </header>
 
+    <!-- Área de Entrega -->
+    <section class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-900 pb-2 mb-6">📤 Envio do Trabalho</h2>
+        
+        <!-- Substitua SEU_ENDPOINT_AQUI pelo link gerado no Formspree (ex: https://formspree.io/f/xbjnqwe) -->
+        <form action="https://formspree.io/f/SEU_ENDPOINT_AQUI" method="POST" enctype="multipart/form-data" class="space-y-4">
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do Aluno 1</label>
+                    <input type="text" name="aluno_1" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm" placeholder="Nome completo">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do Aluno 2</label>
+                    <input type="text" name="aluno_2" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm" placeholder="Nome completo">
+                </div>
+            </div>
+    
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">E-mail do Líder da Dupla</label>
+                    <input type="email" name="email" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm" placeholder="seuemail@aluno.umj.edu.br">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tema Sorteado</label>
+                    <select name="tema" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm bg-white">
+                        <option value="" disabled selected>Selecione o Tema...</option>
+                        <option value="Tema 1">Tema 1: Estacas Pré-Moldadas</option>
+                        <option value="Tema 2">Tema 2: Estacas Franki</option>
+                        <option value="Tema 3">Tema 3: Escavadas c/ Fluido e Raiz</option>
+                        <option value="Tema 4">Tema 4: Hélice Contínua Monitorada</option>
+                        <option value="Tema 5">Tema 5: Strauss e Trado Manual</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Relatório Técnico (Somente PDF)</label>
+                <input type="file" name="relatorio_pdf" accept=".pdf" required class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-300 rounded-lg cursor-pointer p-1">
+            </div>
+    
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Link dos Slides da Apresentação (Google Slides, Canva, OneDrive)</label>
+                <input type="url" name="link_slides" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm" placeholder="https://...">
+            </div>
+    
+            <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition duration-200 shadow-md">
+                Enviar Trabalho Prático
+            </button>
+        </form>
+    </section>
+
     <main class="max-w-4xl mx-auto py-10 px-4 space-y-8">
 
         <!-- Banner Informativo -->
